@@ -1,8 +1,7 @@
-/*
+﻿/*
    BME680_GSS.ino, BME680 Google Spreadsheet recorder, multicore
    (c) 2021 @RR_Inyo
-   Released under the MIT License.
-   http://opensource.org/licenses/mit-license.php
+   Released under 
 */
 
 #include <M5Stack.h>
@@ -21,7 +20,7 @@ void errLcd(void);
 // Declare WiFi constants
 void connectWiFi(void);
 const char* ssid = "XXXXXXXXXX";
-const char* password = "YYYYYYYYYY";
+const char* password = "YYYYYYYYYY2";
 
 // Declare NTP servers and the setting constants
 const char* server1 = "ntp.nict.jp";
@@ -35,11 +34,13 @@ void showFrame(void);
 void showBatt(void);
 void showClock(void);
 void showIPaddress(void);
+void showHTTPCode(void);
 void showIAQAccuracy(void);
 
 // Declare a function to report data to Google Spreadsheet
 void reportGSS(void* arg);
 const char* apiURL = "https://script.google.com/macros/s/ZZZZZZZZZZ/exec";
+int httpCode;
 
 // Obtain handler for BME680
 Bsec iaqSensor;
@@ -127,6 +128,9 @@ void loop(void)
 
   // Show IP adress
   showIPAddress();
+
+  // Show HTTP code
+  showHTTPCode();
 
   // Show IAQ accuracy
   showIAQAccuracy();
@@ -392,6 +396,17 @@ void showIPAddress(void)
 }
 
 /*
+   Show HTTP code
+*/
+void showHTTPCode(void)
+{
+  // Show response on LCD
+  M5.Lcd.setTextSize(1);
+  M5.Lcd.setCursor(220, 232, 1);
+  M5.Lcd.printf("HTTP:%d", httpCode);
+}
+
+/*
    Show IAQ accuracy
 */
 void showIAQAccuracy(void)
@@ -448,11 +463,6 @@ void reportGSS(void* arg)
 
     // Report to Google Spreadsheet API
     http.begin(apiURL);
-    int httpCode = http.POST(pubMessage);
-
-    // Show response on LCD
-    M5.Lcd.setTextSize(1);
-    M5.Lcd.setCursor(220, 232, 1);
-    M5.Lcd.printf("HTTP:%d", httpCode);
+    httpCode = http.POST(pubMessage);
   }
 }
