@@ -20,7 +20,7 @@ void errLcd(void);
 // Declare WiFi constants
 void connectWiFi(void);
 const char* ssid = "XXXXXXXXXX";
-const char* password = "YYYYYYYYYY2";
+const char* password = "YYYYYYYYYY";
 
 // Declare NTP servers and the setting constants
 const char* server1 = "ntp.nict.jp";
